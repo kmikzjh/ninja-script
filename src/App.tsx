@@ -1,10 +1,8 @@
-import {ChangeEvent, useMemo, useState} from "react";
+import {ChangeEvent, useState} from "react";
 import {evalInputCode, getAppLocalDataDirPath, getOldFile} from "./Utils";
 import CodeEditor from '@uiw/react-textarea-code-editor';
 import "./App.css";
 import StatusBar from "./components/StatusBar.tsx";
-import BunPathContext, {ContextValue} from "./data/bun-binary-context.tsx";
-import {bunBinparyPathDefault} from "./constants";
 
 let appLocalDataDir = '';
 let lastFile = '';
@@ -18,31 +16,22 @@ getOldFile().then((res) => {
 })
 
 function App() {
-    const [dataContext, setDataContext] = useState<ContextValue["dataContext"]>(bunBinparyPathDefault);
-    const contextValue = useMemo(() => ({dataContext, setDataContext}), [dataContext, setDataContext]);
     const [codeInput, setCodeInput] = useState(lastFile);
     const [codeOutput, setCodeOutput] = useState('');
     const [statusCode, setStatusCode] = useState('')
     const [statusMessage, setStatusMessage] = useState('')
 
     const handleOnChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-        if (dataContext.binaryPath.length == 0) {
-            console.log('ERROR')
-            setStatusCode('Error')
-            setStatusMessage('Ingrese la ruta de bun')
-            event.preventDefault();
-        } else {
-            setStatusCode('Info')
-            setStatusMessage('Processing...')
-            setCodeInput(event.target.value)
-            evalInputCode(event.target.value, appLocalDataDir, dataContext.binaryPath).then((result: any) => {
-                setCodeOutput(result)
-                console.log("-> codeInput", codeInput);
-                console.log("-> codeOutput", codeOutput);
-                setStatusCode('Ok')
-                setStatusMessage('')
-            })
-        }
+        setStatusCode('Info')
+        setStatusMessage('Processing...')
+        setCodeInput(event.target.value)
+        evalInputCode(event.target.value, appLocalDataDir).then((result: any) => {
+            setCodeOutput(result)
+            console.log("-> codeInput", codeInput);
+            console.log("-> codeOutput", codeOutput);
+            setStatusCode('Ok')
+            setStatusMessage('')
+        })
     }
 
     // if (lastFile.length > 0) {
@@ -51,9 +40,7 @@ function App() {
 
     return (
         <>
-            <BunPathContext.Provider value={contextValue}>
-                <StatusBar statusCode={statusCode} statusMessage={statusMessage}/>
-            </BunPathContext.Provider>
+            <StatusBar statusCode={statusCode} statusMessage={statusMessage}/>
             <section
                 className='container'
             >
@@ -70,7 +57,7 @@ function App() {
                 />
                 <CodeEditor
                     language="js"
-                    placeholder="Enter JS/TS code."
+                    placeholder="JS/TS output."
                     padding={15}
                     value={codeOutput}
                     readOnly={true}

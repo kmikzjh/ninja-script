@@ -38,7 +38,7 @@ To build the app, use `cargo tauri build`
 
 ## TODO
 - [] Change default icon (right now is used the Tauri icon, hehe)
-- [] Save bun binary path
+- [] Use `which` / `where` to determine bun path
 - [] Re-structure app to improve clean code
 - [] Write unit test, ups!
 - [] Create new tabs

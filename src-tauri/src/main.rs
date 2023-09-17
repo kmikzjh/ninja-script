@@ -6,6 +6,7 @@ use std::fs::File;
 use std::fs::create_dir_all;
 use std::io::{Read, Write};
 use std::env;
+use dirs::home_dir;
 
 fn write_temp_js_file(content: &str, dir: &str)  -> std::io::Result<()> {
     let _ = create_dir_all(dir);
@@ -17,11 +18,13 @@ fn write_temp_js_file(content: &str, dir: &str)  -> std::io::Result<()> {
 }
 
 #[tauri::command]
-fn exec_bun(input_code: &str, data_path: &str, binary_path: &str) -> String {
+fn exec_bun(input_code: &str, data_path: &str) -> String {
+    let h_dir = home_dir().unwrap();
+    let home_path: String =String::from(h_dir.to_string_lossy());
     let temp_directory = data_path;
     let _ = write_temp_js_file(input_code, &temp_directory);
     let temp_file = format!("{}temp_js_file.ts", temp_directory);
-    let mut bun_command = Command::new(&binary_path).arg(temp_file)
+    let mut bun_command = Command::new(format!("{}/.bun/bin/bun", home_path)).arg(temp_file)
         .stdout(std::process::Stdio::piped())
         .spawn()
         .expect("no se pudo ejecutar el proceso");

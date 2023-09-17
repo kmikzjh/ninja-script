@@ -12,7 +12,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
-  --calc-height: calc(100vh - 67px);
+  --calc-height: calc(100vh - 40px);
 }
 
 body {
@@ -21,7 +21,7 @@ body {
 }
 
 .container {
-  margin: 67px 0 0 0;
+  margin: 40px 0 0 0;
   display: flex;
   flex-direction: row;
   justify-content: left;
@@ -37,7 +37,7 @@ body {
   flex-grow: 1;
   word-break: break-word;
   min-height: 100%;
-  min-width: 50vh;
+  min-width: 45vw;
 }
 
 .status-bar-container {
@@ -56,7 +56,6 @@ body {
 }
 
 .status-bar-status-text {
-  padding: 0.6em 1.2em;
   text-align: right;;
 }
 
