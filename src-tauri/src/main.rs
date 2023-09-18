@@ -26,6 +26,7 @@ fn exec_bun(input_code: &str, data_path: &str) -> String {
     let temp_file = format!("{}temp_js_file.ts", temp_directory);
     let mut bun_command = Command::new(format!("{}/.bun/bin/bun", home_path)).arg(temp_file)
         .stdout(std::process::Stdio::piped())
+        .stderr(std::process::Stdio::piped())
         .spawn()
         .expect("no se pudo ejecutar el proceso");
     let result = bun_command.wait().expect("Error al esperar por el proceso");
@@ -35,7 +36,10 @@ fn exec_bun(input_code: &str, data_path: &str) -> String {
         let _ = stdout.read_to_string(&mut output);
         format!("{}", output)
     } else {
-        format!("")
+        let mut stderr = bun_command.stderr.expect("No se encontró ninguna salida");
+        let mut output = String::new();
+        let _ = stderr.read_to_string(&mut output);
+        format!("{}", output.replace(temp_directory, "").replace("temp_js_file.ts", "line"))
     }
 }
 

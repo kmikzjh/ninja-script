@@ -6,18 +6,13 @@ A JS/TS playground write using Tauri + React + Vite + Rust, made for fun <3
 
 ## Pre-requisites
 
-- [Bun](https://bun.sh/) (currently only `bun runtime` is available in windows)
+- [Bun](https://bun.sh/) (currently only `bun runtime` is available on windows)
 - [Pnpm](https://pnpm.io/es/installation)
 - [Rust](https://www.rust-lang.org/tools/install)
 - [Tauri-cli](https://tauri.app/v1/guides/getting-started/setup/vite)
 
 ### Bun
 Bun is the core of this project, is used to process JS/TS code.
-You need to specified bun binary path in the app.
-
-Example:
-
-![bun binary path](docs/img/bun-binary-path.png "bun binary path")
 
 ### Pnpm
 Pnpm is used for the installations of dependencies and build the React App components.
@@ -43,6 +38,7 @@ To build the app, use `cargo tauri build`
 - [] Write unit test, ups!
 - [] Create new tabs
 - [] Stylising the app to improve UI/UX
+- [] Theme selector
 - [] Improve my english :P
 - ... and more
 

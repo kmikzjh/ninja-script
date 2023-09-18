@@ -20,6 +20,10 @@ body {
   margin: 0;
 }
 
+/*.CodeMirror, .cm-theme, .cm-editor {*/
+/*    pointer-events: none;*/
+/*}*/
+
 .container {
   margin: 40px 0 0 0;
   display: flex;
@@ -29,11 +33,15 @@ body {
   min-height: var(--calc-height);
 }
 
-.w-tc-editor:first-child{
+.cm-theme {
+  flex-grow: 1;
+}
+
+.cm-theme:first-child {
   border-right: 1px solid #0f0f0f;
 }
 
-.w-tc-editor{
+.cm-editor{
   flex-grow: 1;
   word-break: break-word;
   min-height: 100%;

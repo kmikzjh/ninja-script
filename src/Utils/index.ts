@@ -2,7 +2,7 @@ import {invoke} from '@tauri-apps/api'
 import {appLocalDataDir} from '@tauri-apps/api/path';
 import {BaseDirectory, readTextFile} from "@tauri-apps/api/fs";
 
-export const evalInputCode = async (inputCode: string, dataPath: string) => {
+export const evalInputCode = async (inputCode: string, dataPath: string): Promise<string> => {
     return await invoke('exec_bun', {inputCode, dataPath})
 }
 
@@ -15,6 +15,6 @@ export const getOldFile = async () => {
         });
     } catch (error) {
         console.log(error);
-        return false;
+        return '';
     }
 };

@@ -1,73 +1,47 @@
-import {ChangeEvent, useState} from "react";
+import {useEffect, useState} from "react";
 import {evalInputCode, getAppLocalDataDirPath, getOldFile} from "./Utils";
-import CodeEditor from '@uiw/react-textarea-code-editor';
 import "./App.css";
 import StatusBar from "./components/StatusBar.tsx";
+import EditorView from "./components/EditorView.tsx";
 
 let appLocalDataDir = '';
-let lastFile = '';
-
-getAppLocalDataDirPath().then((res: string) => {
-    appLocalDataDir = res;
-})
-
-getOldFile().then((res) => {
-    lastFile = res || '';
-})
+let lastInput: string = '';
+let lastOutput: string = '';
 
 function App() {
-    const [codeInput, setCodeInput] = useState(lastFile);
-    const [codeOutput, setCodeOutput] = useState('');
-    const [statusCode, setStatusCode] = useState('')
+    const [loading, setLoading] = useState(false);
+    const [statusCode, setStatusCode] = useState('Ok')
     const [statusMessage, setStatusMessage] = useState('')
 
-    const handleOnChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    const initApp = async () => {
         setStatusCode('Info')
-        setStatusMessage('Processing...')
-        setCodeInput(event.target.value)
-        evalInputCode(event.target.value, appLocalDataDir).then((result: any) => {
-            setCodeOutput(result)
-            console.log("-> codeInput", codeInput);
-            console.log("-> codeOutput", codeOutput);
-            setStatusCode('Ok')
-            setStatusMessage('')
-        })
+        setStatusMessage('Initialize app')
+        appLocalDataDir = await getAppLocalDataDirPath();
+        lastInput = await getOldFile();
+        if (lastInput != '') {
+            lastOutput = await evalInputCode(lastInput, appLocalDataDir);
+        }
+        setStatusCode('Ok')
+        setStatusMessage('')
     }
-
-    // if (lastFile.length > 0) {
-    //     handleOnChange(lastFile)
-    // }
+    useEffect(() => {
+        setLoading(true)
+        initApp().then(() => {
+            setLoading(false)
+            console.log('🚀 last configuration loaded');
+        })
+    },[])
 
     return (
         <>
             <StatusBar statusCode={statusCode} statusMessage={statusMessage}/>
-            <section
-                className='container'
-            >
-                <CodeEditor
-                    language="js"
-                    placeholder="Enter JS/TS code."
-                    padding={15}
-                    value={codeInput}
-                    onChange={(event) => handleOnChange(event)}
-                    style={{
-                        fontSize: 14,
-                        fontFamily: 'ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace',
-                    }}
-                />
-                <CodeEditor
-                    language="js"
-                    placeholder="JS/TS output."
-                    padding={15}
-                    value={codeOutput}
-                    readOnly={true}
-                    style={{
-                        fontSize: 14,
-                        fontFamily: 'ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace',
-                    }}
-                />
-
-            </section>
+            {!loading &&
+            <EditorView
+                initialInput={lastInput}
+                appLocalDataDir={appLocalDataDir}
+                initialOutput={lastOutput}
+            />
+            }
         </>
     );
 }
