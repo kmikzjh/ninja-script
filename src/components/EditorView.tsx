@@ -1,8 +1,9 @@
 import CodeMirror from '@uiw/react-codemirror';
-import { dracula } from "@uiw/codemirror-theme-dracula";
+// import { dracula } from "@uiw/codemirror-theme-dracula";
+import {aura} from "@uiw/codemirror-theme-aura";
 import {langs} from "@uiw/codemirror-extensions-langs";
 import {useCallback, useState} from "react";
-import {evalInputCode} from "../Utils";
+import fileApiService from "../services/file-api.service.ts";
 
 function EditorView(props: {
     initialInput: string,
@@ -13,7 +14,7 @@ function EditorView(props: {
     const [codeOutput, setCodeOutput] = useState(props.initialOutput ?? '')
     const handleOnChange = useCallback((value: string) => {
         setCodeInput(value)
-        evalInputCode(value, props.appLocalDataDir).then((result: any) => {
+        fileApiService.evalInputCode(value, props.appLocalDataDir).then((result: any) => {
             setCodeOutput(result)
         })
     }, [])
@@ -22,17 +23,17 @@ function EditorView(props: {
             className='container'
         >
             <CodeMirror
-              value={codeInput}
-              theme={dracula}
-              onChange={handleOnChange}
-              extensions={[langs.tsx()]}
+                value={codeInput}
+                theme={aura}
+                onChange={handleOnChange}
+                extensions={[langs.tsx()]}
             />
             <CodeMirror
-              value={codeOutput}
-              editable={false}
-              readOnly={true}
-              theme={dracula}
-              extensions={[langs.tsx()]}
+                value={codeOutput}
+                editable={false}
+                readOnly={true}
+                theme={aura}
+                extensions={[langs.tsx()]}
             />
         </section>
     )

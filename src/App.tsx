@@ -1,28 +1,33 @@
 import {useEffect, useState} from "react";
-import {evalInputCode, getAppLocalDataDirPath, getOldFile} from "./Utils";
+import FileApiService from "./services/file-api.service.ts";
 import "./App.css";
 import StatusBar from "./components/StatusBar.tsx";
 import EditorView from "./components/EditorView.tsx";
+import { useAppStatusStore} from "./store/app-status.ts";
 
 let appLocalDataDir = '';
 let lastInput: string = '';
 let lastOutput: string = '';
 
 function App() {
+    const appStatus = useAppStatusStore(state => state.appStatus)
+    const setStatus = useAppStatusStore(state => state.setStatus)
     const [loading, setLoading] = useState(false);
-    const [statusCode, setStatusCode] = useState('Ok')
-    const [statusMessage, setStatusMessage] = useState('')
 
     const initApp = async () => {
-        setStatusCode('Info')
-        setStatusMessage('Initialize app')
-        appLocalDataDir = await getAppLocalDataDirPath();
-        lastInput = await getOldFile();
+        setStatus({
+            code: 'Info',
+            message: 'Initializing app'
+        })
+        appLocalDataDir = await FileApiService.getAppLocalDataDirPath();
+        lastInput = await FileApiService.getOldFile();
         if (lastInput != '') {
-            lastOutput = await evalInputCode(lastInput, appLocalDataDir);
+            lastOutput = await FileApiService.evalInputCode(lastInput, appLocalDataDir);
         }
-        setStatusCode('Ok')
-        setStatusMessage('')
+       setStatus({
+            code: 'Ok',
+            message: ''
+        })
     }
     useEffect(() => {
         setLoading(true)
@@ -33,8 +38,8 @@ function App() {
     },[])
 
     return (
-        <>
-            <StatusBar statusCode={statusCode} statusMessage={statusMessage}/>
+        <main>
+            <StatusBar statusCode={appStatus.code} statusMessage={appStatus.message}/>
             {!loading &&
             <EditorView
                 initialInput={lastInput}
@@ -42,7 +47,7 @@ function App() {
                 initialOutput={lastOutput}
             />
             }
-        </>
+        </main>
     );
 }
 
