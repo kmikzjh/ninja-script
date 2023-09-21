@@ -23,6 +23,17 @@
       },
       "path": {
         "all": true
+      },
+      "window": {
+        "all": false,
+        "close": true,
+        "hide": true,
+        "show": true,
+        "maximize": true,
+        "minimize": true,
+        "unmaximize": true,
+        "unminimize": true,
+        "startDragging": true
       }
     },
     "bundle": {
@@ -44,9 +55,11 @@
       {
         "fullscreen": false,
         "resizable": true,
-        "title": "ninja-script",
+        "title": "Ninja Script - JS/TS Playground",
         "width": 800,
-        "height": 600
+        "height": 600,
+        "hiddenTitle": true,
+        "titleBarStyle": "Overlay"
       }
     ]
   }
