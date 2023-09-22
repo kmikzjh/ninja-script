@@ -38,7 +38,7 @@ To build the app, use `cargo tauri build`
 - [] Write unit test, ups!
 - [] Create new tabs
 - [] Stylising the app to improve UI/UX
-- [] Theme selector
+- [x] Theme selector
 - [] Improve my english :P
 - ... and more
 

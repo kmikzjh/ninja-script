@@ -1,10 +1,10 @@
 import CodeMirror from '@uiw/react-codemirror';
-// import { dracula } from "@uiw/codemirror-theme-dracula";
-import {aura} from "@uiw/codemirror-theme-aura";
+import {THEMES} from "../constants/themes.ts";
 import {langs} from "@uiw/codemirror-extensions-langs";
 import {useCallback, useState} from "react";
 import fileApiService from "../services/file-api.service.ts";
 import {useAppStatusStore} from "../store/app-status.ts";
+import {useAppSettingsStore} from "../store/app-settings.ts";
 
 function EditorView(props: {
     initialInput: string,
@@ -14,6 +14,13 @@ function EditorView(props: {
     const [codeInput, setCodeInput] = useState(props.initialInput)
     const [codeOutput, setCodeOutput] = useState(props.initialOutput ?? '')
     const setStatus = useAppStatusStore(state => state.setStatus)
+    const theme = useAppSettingsStore(state => state.appSettings.theme)
+    const setSettings = useAppSettingsStore(state => state.setSettings)
+    // @ts-ignore
+    const selectedTheme = THEMES.hasOwnProperty(theme) ? THEMES[theme] : THEMES.aura
+    if (theme === "") {
+        setSettings({theme: 'aura'})
+    }
     const handleOnChange = useCallback((value: string) => {
         setStatus({
             code: 'Info',
@@ -34,7 +41,7 @@ function EditorView(props: {
         >
             <CodeMirror
                 value={codeInput}
-                theme={aura}
+                theme={selectedTheme}
                 onChange={handleOnChange}
                 extensions={[langs.tsx()]}
                 basicSetup={{
@@ -45,7 +52,7 @@ function EditorView(props: {
                 value={codeOutput}
                 editable={false}
                 readOnly={true}
-                theme={aura}
+                theme={selectedTheme}
                 extensions={[langs.tsx()]}
                 basicSetup={{
                     crosshairCursor: false

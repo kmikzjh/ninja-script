@@ -12,16 +12,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
-  --calc-height: calc(100vh - 41px);
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+  --calc-height: calc(100vh - 51px);
 }
 
 body {
@@ -33,7 +24,7 @@ body {
 }
 
 .titlebar {
-  height: 40px;
+  height: 50px;
   background: transparent;
   user-select: none;
   display: flex;
@@ -43,10 +34,11 @@ body {
   left: 0;
   right: 0;
   z-index: 100;
+  width: calc(100vw - 60px);
 }
 
 .container {
-  margin: 41px 0 0 0;
+  margin: 51px 0 0 0;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -87,16 +79,7 @@ body {
   top: 0;
   left: 0;
   padding: 10px;
-  background: #0a3069;
-  width: 100%;
-  display: flex;
+  background: #3b3859;
+  width: 100vw;
   z-index: 1;
-}
-
-.status-bar-elements {
-  flex-grow: 1;
-}
-
-.status-bar-status-text {
-  text-align: right;;
 }
